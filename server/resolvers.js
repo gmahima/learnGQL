@@ -12,9 +12,13 @@ const Company = {
     jobs: (company) => db.jobs.list().filter(job => (job.companyId===company.id))
 }
 const Mutation = {
-    createJob: (root, args) => {
-        return db.jobs.get(db.jobs.create(args.input));
-        
+    createJob: (root, args, context) => {
+        if(!context.user){
+            throw new Error("unauthorized")
+        }
+        console.log(args);
+        let id= db.jobs.create(args.input);
+        return db.jobs.get(id);
     }
 }
 

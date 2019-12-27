@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { isLoggedIn, logout } from './auth';
@@ -7,6 +8,8 @@ import { JobBoard } from './JobBoard';
 import { JobDetail } from './JobDetail';
 import { JobForm } from './JobForm';
 import { NavBar } from './NavBar';
+
+
 
 export class App extends Component {
   constructor(props) {

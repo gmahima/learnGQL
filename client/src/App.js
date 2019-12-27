@@ -1,4 +1,4 @@
-
+import {ApolloClient,ApolloLink, HttpLink, InMemoryCache} from 'apollo-boost'
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { isLoggedIn, logout } from './auth';
@@ -8,8 +8,30 @@ import { JobBoard } from './JobBoard';
 import { JobDetail } from './JobDetail';
 import { JobForm } from './JobForm';
 import { NavBar } from './NavBar';
+import gql from 'graphql-tag'
+import {ApolloProvider} from 'react-apollo'
+const endPointUrl = "http://localhost:9000/graphql"
+const client = new ApolloClient({
+  link: new ApolloLink.from([new HttpLink({uri: endPointUrl})]),
+  cache: new InMemoryCache()
+})
 
-
+client.query({
+  query: gql`
+    query {
+      jobs{
+        id
+        title
+        description
+        company{
+            name
+            id
+            description
+        }
+      }
+    }
+  `
+}).then((res) => console.log(res))
 
 export class App extends Component {
   constructor(props) {
@@ -32,6 +54,7 @@ export class App extends Component {
     const {loggedIn} = this.state;
     return (
       <Router ref={(router) => this.router = router}>
+      <ApolloProvider client={client} >
         <div>
           <NavBar loggedIn={loggedIn} onLogout={this.handleLogout.bind(this)} />
           <section className="section">
@@ -46,6 +69,7 @@ export class App extends Component {
             </div>
           </section>
         </div>
+        </ApolloProvider>
       </Router>
     );
   }

@@ -1,24 +1,44 @@
 import React, { Component } from 'react';
 import { JobList } from './JobList';
-import {loadJobs} from './requests'
-
+//import {loadJobs} from './requests'
+import {Query} from 'react-apollo'
+import gql from 'graphql-tag'
 
 
 export class JobBoard extends Component {
-  state = {
-    jobs: []
-  }
-  async componentDidMount() {
-    const jobs = await loadJobs();
-    this.setState({jobs});
-  }
   render() {
-    let jobs = this.state.jobs;
     return (
+      <Query query={
+        gql`
+    query {
+      jobs{
+        id
+        title
+        description
+        company{
+            name
+            id
+            description
+        }
+      }
+    }
+  `
+      }>
+      {({data, loading, error}) => {
+        if(loading) {
+          return <p>loading</p>
+      }
+      if(error) {
+        throw new Error("errror")
+        return null;
+      }
+
+        return(
       <div>
         <h1 className="title">Job Board</h1>
-        <JobList jobs={jobs} />
-      </div>
+        <JobList jobs={data.jobs} />
+      </div>)}}
+      </Query>
     );
   }
 }

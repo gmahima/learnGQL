@@ -1,5 +1,22 @@
 import React, { Component } from 'react';
 import {CreateJob} from './requests'
+import gql from 'graphql-tag'
+import {Mutation} from 'react-apollo'
+
+const mutation = gql `mutation createJob($input: CreateJobInput){ 
+  job: createJob(input: $input){
+    id
+    title
+    description
+    company{
+      id
+      name
+      description
+
+    }
+  }
+  }`;
+
 export class JobForm extends Component {
   constructor(props) {
     super(props);
@@ -11,25 +28,38 @@ export class JobForm extends Component {
     this.setState({[name]: value});
   }
 
-  handleClick(event) {
-    const companyId = "SJV0-wdOM";
-    const{title, description} = this.state;
-    event.preventDefault();
-    CreateJob({title, description, companyId}).then(
-      (job) => {
-        //console.log(job);
-        this.props.history.push(`/jobs/${job.id}`)
-      }
-    )   
-  }
+//  // handleClick(event) {
+//     companyId = "SJV0-wdOM";
+  //   const{title, description} = this.state;
+  //   event.preventDefault();
+  //   CreateJob({title, description, companyId}).then(
+  //     (job) => {
+  //       //console.log(job);
+  //       this.props.history.push(`/jobs/${job.id}`)
+  //     }
+  //   )   
+  // }
+  
 
   render() {
+    
+    const companyId = "SJV0-wdOM";
     const {title, description} = this.state;
     return (
-      <div>
+      <Mutation mutation={mutation}>
+    {(createJob, {res, loading, error}) => {
+      return (  
+        <div>
         <h1 className="title">New Job</h1>
         <div className="box">
-          <form>
+          <form onSubmit={
+            (e) => {
+        e.preventDefault();
+        createJob({
+            variables:{title, description, companyId}
+        }).then(({job}) => this.props.history.push(`/jobs/${job.id}`))
+      }
+          }>
             <div className="field">
               <label className="label">Title</label>
               <div className="control">
@@ -46,12 +76,13 @@ export class JobForm extends Component {
             </div>
             <div className="field">
               <div className="control">
-                <button className="button is-link" onClick={this.handleClick.bind(this)}>Submit</button>
+                <button className="button is-link" type="submit" value="submit" />
               </div>
             </div>
           </form>
         </div>
-      </div>
-    );
+      </div>)}}
+    </Mutation>   
+   );
   }
 }

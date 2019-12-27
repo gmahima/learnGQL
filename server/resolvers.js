@@ -17,8 +17,9 @@ const Mutation = {
             throw new Error("unauthorized")
         }
         console.log(args);
-        let id= db.jobs.create(args.input);
+        let id= db.jobs.create({...args.input, companyId:context.user.companyId});
         return db.jobs.get(id);
+       //return null;
     }
 }
 

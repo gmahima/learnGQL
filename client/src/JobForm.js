@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import {CreateJob} from './requests'
 export class JobForm extends Component {
   constructor(props) {
     super(props);
@@ -12,8 +12,15 @@ export class JobForm extends Component {
   }
 
   handleClick(event) {
+    const companyId = "SJV0-wdOM";
+    const{title, description} = this.state;
     event.preventDefault();
-    console.log('should post a new job:', this.state);
+    CreateJob({title, description, companyId}).then(
+      (job) => {
+        //console.log(job);
+        this.props.history.push(`/jobs/${job.id}`)
+      }
+    )   
   }
 
   render() {

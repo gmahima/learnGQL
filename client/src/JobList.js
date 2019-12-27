@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 export class JobList extends Component {
   render() {
     const {jobs} = this.props;
+  //  console.log(jobs);
     return (
       <ul className="box">
-        {jobs.map(this.renderJob.bind(this))}
+        {(jobs) ?jobs.map(this.renderJob.bind(this)): null}
       </ul>
     );
   }

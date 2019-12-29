@@ -46,7 +46,7 @@ export class JobForm extends Component {
     const companyId = "SJV0-wdOM";
     const {title, description} = this.state;
     return (
-      <Mutation mutation={mutation}>
+      <Mutation mutation={mutation} variables={{title, description, companyId}}>
     {(createJob, {res, loading, error}) => {
     
       return (  
@@ -54,12 +54,7 @@ export class JobForm extends Component {
         <h1 className="title">New Job</h1>
         <div className="box">
           <form onSubmit={
-            (e) => {
-        e.preventDefault();
-        createJob({
-            variables:{title, description, companyId}
-        })
-      }
+            createJob
           }>
             <div className="field">
               <label className="label">Title</label>
@@ -77,7 +72,7 @@ export class JobForm extends Component {
             </div>
             <div className="field">
               <div className="control">
-                <button className="button is-link" type="submit" value="submit" />
+                <button className="button is-link" type="submit" value="submit">submit</button>
               </div>
             </div>
           </form>

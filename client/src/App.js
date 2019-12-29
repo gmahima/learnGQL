@@ -10,6 +10,9 @@ import { JobForm } from './JobForm';
 import { NavBar } from './NavBar';
 import gql from 'graphql-tag'
 import {ApolloProvider} from 'react-apollo'
+
+
+
 const endPointUrl = "http://localhost:9000/graphql"
 const authLink = new ApolloLink((operation, forward) => {
   if(isLoggedIn()) {
@@ -25,6 +28,7 @@ const authLink = new ApolloLink((operation, forward) => {
 const client = new ApolloClient({
   link: new ApolloLink.from([authLink, new HttpLink({uri: endPointUrl})]),
   cache: new InMemoryCache()
+  
 })
 
 client.query({

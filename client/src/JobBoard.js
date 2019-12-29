@@ -24,7 +24,7 @@ export class JobBoard extends Component {
     }
   `
       }>
-      {({data, loading, error}) => {
+      {({data, loading, error, refetch}) => {
         if(loading) {
           return <p>loading</p>
       }
@@ -37,6 +37,7 @@ export class JobBoard extends Component {
       <div>
         <h1 className="title">Job Board</h1>
         <JobList jobs={data.jobs} />
+        <button onClick={() => refetch()}>Refresh</button>
       </div>)}}
       </Query>
     );

@@ -14,10 +14,12 @@ export class JobList extends Component {
 
   renderJob(job) {
     const title = job.company ? `${job.title} at ${job.company.name}` : job.title;
+  
     return (
       <li className="media" key={job.id}>
         <div className="media-content">
           <Link to={`/jobs/${job.id}`}>{title}</Link>
+          <span color={job.isStarred?'yellow':'grey'}>{job.isStarred?'*****':null}</span>
         </div>
       </li>
     );

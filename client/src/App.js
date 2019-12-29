@@ -1,7 +1,7 @@
 import {ApolloClient,ApolloLink, HttpLink, InMemoryCache} from 'apollo-boost'
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { isLoggedIn, logout } from './auth';
+import { isLoggedIn, logout, getAccessToken } from './auth';
 import { CompanyDetail } from './CompanyDetail';
 import { LoginForm } from './LoginForm';
 import { JobBoard } from './JobBoard';
@@ -11,8 +11,19 @@ import { NavBar } from './NavBar';
 import gql from 'graphql-tag'
 import {ApolloProvider} from 'react-apollo'
 const endPointUrl = "http://localhost:9000/graphql"
+const authLink = new ApolloLink((operation, forward) => {
+  if(isLoggedIn()) {
+    operation.setContext({
+      headers: {
+        'authorization': 'Bearer ' + getAccessToken()
+      }
+    })
+    
+  }
+  return forward(operation)
+})
 const client = new ApolloClient({
-  link: new ApolloLink.from([new HttpLink({uri: endPointUrl})]),
+  link: new ApolloLink.from([authLink, new HttpLink({uri: endPointUrl})]),
   cache: new InMemoryCache()
 })
 

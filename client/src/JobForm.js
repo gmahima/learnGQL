@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {CreateJob} from './requests'
+
 import gql from 'graphql-tag'
 import {Mutation} from 'react-apollo'
 
@@ -48,6 +48,7 @@ export class JobForm extends Component {
     return (
       <Mutation mutation={mutation}>
     {(createJob, {res, loading, error}) => {
+    
       return (  
         <div>
         <h1 className="title">New Job</h1>
@@ -57,7 +58,7 @@ export class JobForm extends Component {
         e.preventDefault();
         createJob({
             variables:{title, description, companyId}
-        }).then(({job}) => this.props.history.push(`/jobs/${job.id}`))
+        })
       }
           }>
             <div className="field">
